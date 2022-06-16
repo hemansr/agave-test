@@ -4,9 +4,10 @@ const cors = require('cors')
 const helmet = require('helmet')
 
 const env = require('./config/env')
-const db = require('./config/db-connection');
-const router = require('./router');
+const db = require('./config/database');
+const router = require('./config/router');
 require('./auth/auth.config');
+const { createDefaultCashier, createDefaultProducts } = require('./utils/db-init');
 
 const app = express()
 
@@ -21,6 +22,8 @@ app.use(router)
 db.sync()
     .then(result => {
         console.log('Database connected!');
+        // createDefaultCashier()
+        // createDefaultProducts()
         startServer();
     })
     .catch(error => {

@@ -1,9 +1,12 @@
 const env = require('../config/env');
 const passport = require('passport')
+const bcrypt = require('bcryptjs');
 
 const localStrategy = require('passport-local').Strategy
 const JWTStrategy = require('passport-jwt').Strategy
 const ExtractJWT = require('passport-jwt').ExtractJwt
+
+const { cashiers } = require('../config/database');
 
 passport.use('login', new localStrategy({
     usernameField: 'username',
@@ -11,12 +14,17 @@ passport.use('login', new localStrategy({
     session: false
 }, async (username, password, done) => {
     try {
-        // get user
-        const user = {
-            _id: 123456,
-            username: 'user'
-        }
-        // validate password
+
+        const user = await cashiers.findOne({
+            where: { username },
+            attributes: ['password']
+        });
+        if (!user) return done(null, null, { message: 'Invalid user' })
+
+        const validPassword = await bcrypt.compare(password, user.password)
+            .catch(() => { return false; })
+
+        if (!validPassword) return done(null, null, { message: 'Invalid password' })
 
         return done(null, user, { message: 'Login successfull' })
     } catch (e) {

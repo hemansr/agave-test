@@ -2,15 +2,23 @@ const env = require('../config/env');
 const passport = require('passport')
 const jwt = require('jsonwebtoken')
 
-const passportLogin = async (req, res, next) => {
+const login = async (req, res, next) => {
 
     passport.authenticate('login', async (err, user, info) => {
         try {
-            if (err || !user) {
+            if (err) {
                 console.log(err)
                 return res.status(500).json({
                     ok: false,
                     message: 'Error: ' + err
+                })
+            }
+
+            if (!user) {
+                console.log(err)
+                return res.status(200).json({
+                    ok: false,
+                    message: 'Incorrect username or password.'
                 })
             }
 
@@ -25,11 +33,14 @@ const passportLogin = async (req, res, next) => {
             })
         }
         catch (error) {
-            return next(error)
+            return res.status(500).json({
+                ok: false,
+                message: 'Error: ' + err
+            })
         }
     })(req, res, next)
 }
 
 module.exports = {
-    passportLogin
+    login
 };

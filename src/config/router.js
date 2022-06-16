@@ -6,7 +6,7 @@ router.get('/', function (req, res) {
     res.end("Hi there!");
 });
 
-const authRoutes = require('./auth/login.routes');
+const authRoutes = require('../auth/auth.routes');
 router.use(authRoutes);
 
 
