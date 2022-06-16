@@ -25,11 +25,14 @@ const login = async (req, res, next) => {
             req.login(user, { session: false }, async (err) => {
                 if (err) return next(err)
 
-                // const body = { _id: user._id, email: user.email }
-                const body = { _id: 123456, username: 'user' }
+                const body = { id: user.id, username: user.username }
 
                 const token = jwt.sign({ user: body }, env.JWT_SECRET)
-                return res.json({ ok: true, token })
+                return res.json({
+                    ok: true,
+                    token,
+                    message: 'Login successfull'
+                })
             })
         }
         catch (error) {

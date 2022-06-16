@@ -9,5 +9,8 @@ router.get('/', function (req, res) {
 const authRoutes = require('../auth/auth.routes');
 router.use(authRoutes);
 
+const ticketsRoutes = require('../components/tickets/tickets.routes');
+router.use(ticketsRoutes);
+
 
 module.exports = router

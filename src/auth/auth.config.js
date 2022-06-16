@@ -17,7 +17,7 @@ passport.use('login', new localStrategy({
 
         const user = await cashiers.findOne({
             where: { username },
-            attributes: ['password']
+            attributes: ['id', 'username','password']
         });
         if (!user) return done(null, null, { message: 'Invalid user' })
 
