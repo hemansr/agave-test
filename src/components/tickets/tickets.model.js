@@ -15,15 +15,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: 'open'
         },
-        subTotalAmount: {
+        subtotalAmmount: {
             type: DataTypes.FLOAT,
             defaultValue: 0
         },
-        discountAmount: {
+        discountAmmount: {
             type: DataTypes.FLOAT,
             defaultValue: 0
         },
-        totalAmount: {
+        totalAmmount: {
             type: DataTypes.FLOAT,
             defaultValue: 0
         }

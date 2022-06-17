@@ -32,7 +32,6 @@ const createTicket = async (req, res, next) => {
     }
 }
 
-
 const addTicketProduct = async (req, res, next) => {
 
     try {
@@ -67,8 +66,51 @@ const addTicketProduct = async (req, res, next) => {
     }
 }
 
+const ticketCheckout = async (req, res, next) => {
+
+    try {
+
+        const cashierId = req.user.id
+        const ticketId = req.body.ticketId
+
+        const ticket = await sequelize.tickets.findByPk(ticketId, { raw: true });
+        
+        if (!ticket || ticket.cashierId !== cashierId)
+            return res.status(200).json({ ok: false, message: 'Invalid ticket Id' });
+        if (ticket.status !== 'open')
+            return res.status(200).json({ ok: false, message: 'Ticket not open' });
+        
+
+        const ticketSummary = await services.getTicketSummary(ticketId)
+
+        const ticketUpdated = await sequelize.tickets.update(
+            {
+                status: 'closed',
+                subtotalAmmount: ticketSummary.subtotalAmmount,
+                discountAmmount: ticketSummary.discountAmmount,
+                totalAmmount: ticketSummary.totalAmmount
+            },
+            { where: { id: ticketId } }
+        );
+
+        return res.status(200).json({
+            ok: true,
+            ticketSummary,
+            message: 'Ticket closed!'
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            message: 'A server error ocurred'
+        })
+    }
+}
+
 
 module.exports = {
     createTicket,
-    addTicketProduct
+    addTicketProduct,
+    ticketCheckout
 };

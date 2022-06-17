@@ -7,14 +7,14 @@ const getData = async ({ cashierId, ticketId, productCode }) => {
     const productConsult = sequelize.products.findOne({ where: { code: productCode } })
 
     const consults = await Promise.all([ticketConsult, productConsult])
-        .catch(error => {
-            console.log(error);
-        })
 
     if (!consults[0])
         return { ok: false, message: 'Invalid ticket' }
     if (consults[0].cashierId !== cashierId)
         return { ok: false, message: 'Invalid ticket and cashier' }
+    if (consults[0].status !== 'open')
+        return { ok: false, message: 'Ticket not open' }
+
     if (!consults[1])
         return { ok: false, message: 'Invalid product code' }
 
@@ -36,18 +36,21 @@ const getTicketSummary = async (ticketId) => {
     const summary = {
         totalProducts,
         subtotalAmmount,
+        discountAmmount: 0
     }
 
     const tshirtDiscount = getTshirtDiscount(ticketProducts);
     if (tshirtDiscount > 0) {
         totalAmmount -= tshirtDiscount;
         summary.tshirtDiscount = tshirtDiscount
+        summary.discountAmmount += tshirtDiscount
     }
 
     const pantsDiscount = getPantsDiscount(ticketProducts);
     if (pantsDiscount > 0) {
         totalAmmount -= pantsDiscount;
         summary.pantsDiscount = pantsDiscount
+        summary.discountAmmount += pantsDiscount
     }
 
     summary.totalAmmount = totalAmmount
