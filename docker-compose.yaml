@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  db:
+    image: postgres
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: agave-test
+    network_mode: bridge
+  backend:
+    build: .
+    ports:
+      - '3001:3000'
+    env_file:
+      - .env
+    depends_on:
+      - db
+    network_mode: bridge
