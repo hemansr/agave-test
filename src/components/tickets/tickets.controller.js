@@ -1,5 +1,5 @@
-const env = require('../../config/env');
 const sequelize = require('../../config/database');
+const services = require('./tickets.service');
 
 const createTicket = async (req, res, next) => {
 
@@ -33,6 +33,42 @@ const createTicket = async (req, res, next) => {
 }
 
 
+const addTicketProduct = async (req, res, next) => {
+
+    try {
+
+        const inputData = {
+            cashierId: req.user.id,
+            ticketId: req.body.ticketId,
+            productCode: req.body.productCode
+        }
+
+        const data = await services.getData(inputData);
+        if (!data.ok)
+            return res.status(200).json({ ok: false, message: data.message });
+
+        const newTicketProduct = await sequelize.ticketProducts.create({ ticket: inputData.ticketId, product: data.product.id })
+
+        const ticketSummary = await services.getTicketSummary(inputData.ticketId)
+
+        return res.status(200).json({
+            ok: true,
+            ticketProduct: newTicketProduct,
+            ticketSummary,
+            message: 'Ticket product added!'
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok: false,
+            message: 'A server error ocurred'
+        })
+    }
+}
+
+
 module.exports = {
-    createTicket
+    createTicket,
+    addTicketProduct
 };

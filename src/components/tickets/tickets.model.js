@@ -15,6 +15,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: 'open'
         },
+        subTotalAmount: {
+            type: DataTypes.FLOAT,
+            defaultValue: 0
+        },
+        discountAmount: {
+            type: DataTypes.FLOAT,
+            defaultValue: 0
+        },
         totalAmount: {
             type: DataTypes.FLOAT,
             defaultValue: 0

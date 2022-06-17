@@ -11,5 +11,6 @@ const sequelize = new Sequelize(env.PG_DATABASE, env.PG_USER, env.PG_PASSWORD, {
 sequelize.cashiers = require('../components/cashiers/cashiers.model')(sequelize, DataTypes);
 sequelize.products = require('../components/products/products.model')(sequelize, DataTypes);
 sequelize.tickets = require('../components/tickets/tickets.model')(sequelize, DataTypes);
+sequelize.ticketProducts = require('../components/tickets/ticket-products.model')(sequelize, DataTypes);
 
 module.exports = sequelize

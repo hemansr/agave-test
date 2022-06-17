@@ -19,8 +19,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(router)
 
-db.sync()
-// db.sync({ force: true })
+// db.sync()
+db.sync({ force: true })
     .then(result => {
         console.log('Database connected!');
         createDefaultCashier()
