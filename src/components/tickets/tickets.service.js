@@ -2,6 +2,12 @@ const { Op } = require("sequelize");
 const _ = require('underscore');
 const sequelize = require('../../config/database');
 
+const getCashierOpenTicket = async (cashierId) => {
+    const openTicket = await sequelize.tickets.findOne({ where: { cashierId, status: 'open' } })
+
+    return openTicket
+}
+
 const getData = async ({ cashierId, ticketId, productCode }) => {
     const ticketConsult = sequelize.tickets.findByPk(ticketId)
     const productConsult = sequelize.products.findOne({ where: { code: productCode } })
@@ -137,6 +143,7 @@ const getPantsDiscount = (ticketProducts) => {
 
 
 module.exports = {
+    getCashierOpenTicket,
     getData,
     getTicketSummary
 };

@@ -7,8 +7,8 @@ const createTicket = async (req, res, next) => {
 
         const cashierId = req.user.id;
 
-        const openTicket = await sequelize.tickets.findOne({ where: { cashierId, status: 'open' } })
-        if (openTicket) {
+        const cashierOpenTicket = await services.getCashierOpenTicket(cashierId);
+        if (cashierOpenTicket) {
             return res.status(200).json({
                 ok: false,
                 message: 'There is an open ticket for the cashier'
@@ -74,12 +74,12 @@ const ticketCheckout = async (req, res, next) => {
         const ticketId = req.body.ticketId
 
         const ticket = await sequelize.tickets.findByPk(ticketId, { raw: true });
-        
+
         if (!ticket || ticket.cashierId !== cashierId)
             return res.status(200).json({ ok: false, message: 'Invalid ticket Id' });
         if (ticket.status !== 'open')
             return res.status(200).json({ ok: false, message: 'Ticket not open' });
-        
+
 
         const ticketSummary = await services.getTicketSummary(ticketId)
 

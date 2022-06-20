@@ -16,7 +16,7 @@ const login = async (req, res, next) => {
 
             if (!user) {
                 console.log(err)
-                return res.status(200).json({
+                return res.status(400).json({
                     ok: false,
                     message: 'Incorrect username or password.'
                 })
