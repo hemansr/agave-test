@@ -4,12 +4,12 @@ const db = require('./config/database');
 require('./auth/auth.config');
 const { createDefaultCashier, createDefaultProducts } = require('./utils/db-init');
 
-// db.sync()
-db.sync({ force: true })
+db.sync()
+// db.sync({ force: true })
     .then(result => {
         console.log('Database connected!');
-        createDefaultCashier()
-        createDefaultProducts()
+        // createDefaultCashier()
+        // createDefaultProducts()
         startServer();
     })
     .catch(error => {

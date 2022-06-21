@@ -17,7 +17,7 @@ const createTicket = async (req, res, next) => {
 
         const newTicket = await sequelize.tickets.create({ cashierId })
 
-        return res.status(200).json({
+        return res.status(201).json({
             ok: true,
             ticket: newTicket,
             message: 'Ticket created!'

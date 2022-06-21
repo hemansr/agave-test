@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY . .
 
+RUN npm test
 RUN npm install --prod
 
 EXPOSE 3000
